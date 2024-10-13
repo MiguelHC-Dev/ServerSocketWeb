@@ -1,5 +1,3 @@
-// index.js
-
 import express from 'express';
 import logger from 'morgan';
 import path from 'path';
@@ -25,7 +23,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
     // Configuración de CORS
     const allowedOrigins = [
         "https://clientesocketweb.onrender.com",
-        "https://9235-2806-104e-3-97c6-649c-1891-e11d-3cfc.ngrok-free.app" // Añadir la URL de ngrok
+        "https://9235-2806-104e-3-97c6-649c-1891-e11d-3cfc.ngrok-free.app"
     ];
 
     app.use(cors({
@@ -56,7 +54,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
             const user = socket.handshake.auth.username ?? 'Anónimo';
 
             try {
-                await DBConnector.query('INSERT INTO messages (content, user) VALUES (?, ?)', [msg, user]);
+                await DBConnector.query('INSERT INTO messages (content, "user") VALUES ($1, $2)', [msg, user]);
                 console.log(`Message: ${msg} from: ${user}`);
 
                 const [latestMessage] = await DBConnector.query('SELECT * FROM messages ORDER BY id DESC LIMIT 1');
@@ -70,7 +68,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
             (async () => {
                 try {
                     const serverOffset = socket.handshake.auth.serverOffset ?? 0;
-                    const results = await DBConnector.query('SELECT id, content, user FROM messages WHERE id > ?', [serverOffset]);
+                    const results = await DBConnector.query('SELECT id, content, "user" FROM messages WHERE id > $1', [serverOffset]);
                     results.forEach(result => {
                         socket.emit('chat message', result.content, result.id, result.user);
                     });
@@ -82,10 +80,6 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
     });
 
     app.use(logger('dev'));
-
-    // app.get('/', (req, res) => {
-    //     res.sendFile(path.join(__dirname, 'client', 'index.html'));
-    // });
 
     server.listen(port, () => {
         console.log(`Server is running on port ${port}`);
