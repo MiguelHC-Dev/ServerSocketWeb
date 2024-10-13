@@ -14,7 +14,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 
 (async () => {
     try {
-        await DBConnector.query('CREATE TABLE IF NOT EXISTS messages (id INT AUTO_INCREMENT PRIMARY KEY, content TEXT, user TEXT)');
+        await DBConnector.query('CREATE TABLE IF NOT EXISTS messages (id SERIAL PRIMARY KEY, content TEXT, "user" TEXT)');
     } catch (e) {
         console.error('Error creating table:', e);
     }
