@@ -23,7 +23,8 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
     // Configuración de CORS
     const allowedOrigins = [
         "https://clientesocketweb.onrender.com",
-        "https://9235-2806-104e-3-97c6-649c-1891-e11d-3cfc.ngrok-free.app"
+        "https://9235-2806-104e-3-97c6-649c-1891-e11d-3cfc.ngrok-free.app",
+        "https://clientesocketweb-86rj.onrender.com"
     ];
 
     app.use(cors({
@@ -85,3 +86,6 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
         console.log(`Server is running on port ${port}`);
     });
 })();
+
+
+//
